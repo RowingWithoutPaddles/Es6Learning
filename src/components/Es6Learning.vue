@@ -12,6 +12,9 @@
     <p>
       <button @click="numberExt">数值的扩展</button>
     </p>
+    <p>
+      <button @click="functionExt">函数的扩展</button>
+    </p>
   </div>
 </template>
 
@@ -20,6 +23,7 @@ import { es6_destructuring } from "@/js/destructuring.js";
 import { string_ext } from "@/js/string_ext.js";
 import { es6_regexp } from "@/js/regexp.js";
 import { es6_numberExt } from "@/js/number_ext.js";
+import { es6_functionExt } from "@/js/function_ext.js";
 
 export default {
   methods: {
@@ -34,6 +38,9 @@ export default {
     },
     numberExt() {
       es6_numberExt();
+    },
+    functionExt() {
+      es6_functionExt();
     },
   }
 };
