@@ -85,10 +85,10 @@ export function es6_functionExt() {
   // Function构造函数返回的函数实例，name属性的值为anonymous
   console.log(`(new Function).name = ${(new Function).name}`);
 
-  function func6() {}
+  function func6() { }
   // bind返回的函数，name属性值会加上bound前缀
   console.log(`func6.bind({}).name = ${func6.bind({}).name}`);
-  console.log(`(function(){}).bind({}).name = ${(function(){}).bind({}).name}`);
+  console.log(`(function(){}).bind({}).name = ${(function () { }).bind({}).name}`);
 
 
   // 箭头函数
@@ -104,6 +104,10 @@ export function es6_functionExt() {
   func6.call({
     id: 42
   })
+
+  // 嵌套的箭头函数
+  let insert = value => ({ into: array => ({ after: afterValue => { array.splice(array.indexOf(afterValue) + 1, 0, value); return array; } }) });
+  console.log(`insert(0).into([1, 3]).after(1) = ${insert(0).into([1, 3]).after(1)}`);
 
   // 下面是一个部署管道机制（pipeline）的例子，即前一个函数的输出是后一个函数的输入
   const pipeline = (...funcs) => {
@@ -128,6 +132,102 @@ export function es6_functionExt() {
   };
   const addThenMulti = pipeline(plus, multi);
   console.log(addThenMulti(5));
+
+
+  // 双冒号运算符: “函数绑定”（function bind）运算符，用来取代call、apply、bind调用。
+  // 函数绑定运算符是并排的两个冒号（::），双冒号左边是一个对象，右边是一个函数。
+  // 该运算符会自动将左边的对象，作为上下文环境（即this对象），绑定到右边的函数上面
+  // foo::bar 等同于 bar.bind(foo)，意思是在foo的上下文环境里调用bar
+  // foo::bar() 等同于 bar.call(foo)
+  // foo::bar(...args) 等同于 bar.apply(foo, ...args)
+
+  // 如果双冒号左边为空，右边是一个对象的方法，则等于将该方法绑定在该对象上面
+  // var method = obj::obj.foo 等同于 var method = ::obj.foo
+  // let log = ::console.log 等同于 let log = console.log.bind(console)
+
+  // 如果双冒号运算符的运算结果，还是一个对象，就可以采用链式写法。
+  // import { map, takeWhile, forEach } from "iterlib";
+  // getPlayers()
+  // ::map(x => x.character())
+  // ::takeWhile(x => x.strength > 100)
+  // ::forEach(x => console.log(x));
+
+
+  // 尾递归，不会发生栈溢出
+  console.log(`factorial(5) = ${factorial(5)}`);
+  let fibonacciArr = [];
+  fibonacci(10, 1, 1, fibonacciArr);
+  console.log(`fibonacciArr = ${fibonacciArr}`);
+  let factorialFunc = currying(tailFactorial, 1);
+  console.log(`柯里化写法：factorialFunc(5) = ${factorialFunc(5)}`);
+
+  Number.prototype[Symbol.iterator] = function*() {
+    let i = 0;
+    let num = this.valueOf();
+    while (i <= num) {
+      yield i++;
+    }
+  }
+
+  console.log(`[...5] = ${[...5]}`);
+  
+  
+}
+
+/**
+ * 尾递归的斐波那契数列
+ */
+function fibonacci(n, ac1 = 1, ac2 = 1, array = []) {
+  array.push(ac2);
+  if (n <= 1) {
+    return ac2;
+  }
+  fibonacci(n - 1, ac2, ac1 + ac2, array);
+}
+
+/**
+ * 尾递归的阶乘
+ */
+function tailFactorial(n, total) {
+  if (n === 1) {
+    return total;
+  }
+  return tailFactorial(n - 1, total * n);
+}
+
+function factorial(n) {
+  return tailFactorial(n, 1);
+}
+
+// 尾递归的阶乘的第二种写法，柯里化
+function currying(fn, n) {
+  return function (m) {
+    return fn.call(this, m, n);
+  }
+}
+
+
+// 尾递归的阶乘的第三种写法
+// function factorial(n, total = 1) {
+//   if (n === 1) {
+//     return total;
+//   }
+//   return factorial(n - 1, total * n);
+// }
+
+/**
+ * 尾调用（Tail Call）就是指某个函数的最后一步是调用另一个函数。
+ * 必须是return xxFunc();
+ * 尾调用不一定出现在函数尾部，只要是最后一步操作即可
+ */
+function tailCall() {
+  return foo();
+}
+function tailCall1(flag) {
+  if (flag) {
+    return func1();
+  }
+  return func2();
 }
 
 var id = 21;
@@ -217,9 +317,9 @@ function func2({
   x,
   y
 } = {
-  x: 0,
-  y: 0
-}) {
+    x: 0,
+    y: 0
+  }) {
   console.log(`func2 x = ${x}, y = ${y}`)
 }
 
