@@ -110,6 +110,7 @@ export function es6_functionExt() {
     // 返回一个函数
     return initialValue => {
       console.log(`initialValue = ${initialValue}`)
+      // preResult是前一次的结果，currentValue是当前的函数
       return funcs.reduce((preResult, currentValue) => {
         console.log(`preResult = ${preResult}`);
         console.log(`currentValue = ${currentValue}`)
