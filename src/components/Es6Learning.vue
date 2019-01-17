@@ -15,6 +15,12 @@
     <p>
       <button @click="functionExt">函数的扩展</button>
     </p>
+    <p>
+      <button @click="arrayExt">数组的扩展</button>
+    </p>
+    <p>
+      <button @click="objectExt">对象的扩展</button>
+    </p>
   </div>
 </template>
 
@@ -24,6 +30,8 @@ import { string_ext } from "@/js/string_ext.js";
 import { es6_regexp } from "@/js/regexp.js";
 import { es6_numberExt } from "@/js/number_ext.js";
 import { es6_functionExt } from "@/js/function_ext.js";
+import { es6_arrayExt } from "@/js/array_ext.js";
+import { es6_objectExt } from "@/js/object_ext.js";
 
 export default {
   methods: {
@@ -42,6 +50,12 @@ export default {
     functionExt() {
       es6_functionExt();
     },
+    arrayExt() {
+      es6_arrayExt();
+    },
+    objectExt() {
+      es6_objectExt();
+    }
   }
 };
 </script>
