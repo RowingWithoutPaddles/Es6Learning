@@ -21,6 +21,9 @@
     <p>
       <button @click="objectExt">对象的扩展</button>
     </p>
+    <p>
+      <button @click="objectNewFunc">对象的新增方法</button>
+    </p>
   </div>
 </template>
 
@@ -32,6 +35,7 @@ import { es6_numberExt } from "@/js/number_ext.js";
 import { es6_functionExt } from "@/js/function_ext.js";
 import { es6_arrayExt } from "@/js/array_ext.js";
 import { es6_objectExt } from "@/js/object_ext.js";
+import { object_newFunc } from "@/js/object_newFunc.js";
 
 export default {
   methods: {
@@ -55,6 +59,9 @@ export default {
     },
     objectExt() {
       es6_objectExt();
+    },
+    objectNewFunc() {
+      object_newFunc();
     }
   }
 };
